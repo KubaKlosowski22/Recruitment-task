@@ -43,7 +43,7 @@ class UserController extends AbstractController
     /**
      * @Route("/api/userslist/{id}", name="users_list_by_id", methods={"GET"})
      */
-    public function getUserById(SerializerInterface $serializer,$id):Response
+    public function getUserById(SerializerInterface $serializer, $id):Response
     {
 
         $this->denyAccessUnlessGranted('ROLE_USER');
@@ -61,7 +61,7 @@ class UserController extends AbstractController
     /**
      * @Route("/api/user/{id}", name="user_delete", methods={"DELETE"})
      */
-    public function deleteUser(SerializerInterface $serialize,$id):Response
+    public function deleteUser(SerializerInterface $serialize, $id):Response
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
         $user = $this->getDoctrine()->getRepository(User::class)->find($id);
@@ -82,7 +82,7 @@ class UserController extends AbstractController
      *
      * @Route("/api/user/{id}", name="email_update", methods={"PUT"})
      */
-    public function updateEmail(SerializerInterface $serializer, Request $request ,$id):Response
+    public function updateEmail(SerializerInterface $serializer, Request $request, $id):Response
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
         $entityManager= $this->getDoctrine()->getManager();
@@ -92,27 +92,27 @@ class UserController extends AbstractController
         $user->setEmail($mail);
 
         $entityManager->flush();
-        $serializer->serialize($user,'json');
+        $serializer->serialize($user, 'json');
 
-        return new JsonResponse($user,Response::HTTP_OK);
+        return new JsonResponse($user, Response::HTTP_OK);
     }
 
     /**
      * @Route("/api/user/changepass/{id}", name="password_update", methods={"PUT"})
      */
-    public function updatePassword(SerializerInterface $serializer,Request $request ,UserPasswordEncoderInterface $encoder, $id): Response
+    public function updatePassword(SerializerInterface $serializer, Request $request, UserPasswordEncoderInterface $encoder, $id): Response
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
         $entityManager= $this->getDoctrine()->getManager();
         $user = $entityManager->getRepository(User::class)->find($id);
 
         $pass= $request->get('password');
-        $encoded = $encoder->encodePassword($user,$pass);
+        $encoded = $encoder->encodePassword($user, $pass);
         $user->setPassword($encoded);
 
         $entityManager->flush();
-        $serializer->serialize($user,'json');
+        $serializer->serialize($user, 'json');
 
-        return new JsonResponse($user,Response::HTTP_OK);
+        return new JsonResponse($user, Response::HTTP_OK);
     }
 }
